@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Velocity</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <canvas id="canvas" width="800" height="800" style="margin: 0;"></canvas>
+    <script src="ball.js"></script>
+    <script src="utils.js"></script>
+    <script src="arrow.js"></script>
+    <script>
+        window.onload = function () {
+            //velocity1();
+            //velocity2();
+            //velocityAngle();
+            //followMouse();
+            rotationalVelocity();
+        };
+
+        function rotationalVelocity() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                mouse = utils.captureMouse(canvas),
+                arrow = new Arrow(),
+                vr = 2; //degrees 
+            arrow.x = canvas.width / 2;
+            arrow.y = canvas.height / 2;
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                arrow.rotation += vr * Math.PI / 180; //to radians 
+                arrow.draw(context);
+            }());
+        }
+
+        function followMouse() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                mouse = utils.captureMouse(canvas),
+                arrow = new Arrow(),
+                speed = 3;
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                var dx = mouse.x - arrow.x,
+                    dy = mouse.y - arrow.y,
+                    angle = Math.atan2(dy, dx), //radians 
+                    vx = Math.cos(angle) * speed,
+                    vy = Math.sin(angle) * speed;
+                arrow.rotation = angle;
+                arrow.x += vx;
+                arrow.y += vy;
+                arrow.draw(context);
+            }());
+        }
+
+        function velocityAngle() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                ball = new Ball(),
+                angle = 90,
+                speed = 1;
+            ball.x = 50;
+            ball.y = 100;
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                var radians = angle * Math.PI / 180,
+                    vx = Math.cos(radians) * speed,
+                    vy = Math.sin(radians) * speed;
+                ball.x += vx;
+                ball.y += vy;
+                ball.draw(context);
+            }());
+
+        }
+
+        function velocity2() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                ball = new Ball(),
+                vx = 1,
+                vy = 2;
+            ball.x = 50;
+            ball.y = 100;
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                ball.x += vx;
+                ball.y += vy;
+                ball.draw(context);
+            }());
+        }
+
+        function velocity1() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                ball = new Ball(),
+                vx = 1;
+            ball.x = 50;
+            ball.y = 100;
+            (function drawFrame() {
+
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                ball.x += vx;
+                ball.draw(context);
+
+                window.requestAnimationFrame(drawFrame, canvas);
+            }());
+        }
+
+    </script>
+</body>
+
+</html>
