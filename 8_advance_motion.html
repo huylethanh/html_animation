@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Advance motion</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+    <canvas id="canvas" width="800" height="800" style="margin: 0;"></canvas>
+    <textarea id="log"></textarea>
+    <script src="scripts/ball.js"></script>
+    <script src="scripts/utils.js"></script>
+    <script src="scripts/arrow.js"></script>
+    <script>
+        window.onload = function () {
+            easing1();
+        };
+
+        function easing1() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                ball = new Ball(),
+                easing = 0.05,
+                targetX = canvas.width / 2,
+                targetY = canvas.height / 2;
+
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                var vx = (targetX - ball.x) * easing,
+                    vy = (targetY - ball.y) * easing;
+
+                ball.x += vx;
+                ball.y += vy;
+                ball.draw(context);
+            }());
+        }
+
+    </script>
+</body>
+
+</html>

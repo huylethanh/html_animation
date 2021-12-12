@@ -79,8 +79,8 @@ utils.captureTouch = function (element) {
             y = touch_event.clientY + document.body.scrollTop +
                 document.documentElement.scrollTop;
         }
-        x -= offsetLeft;
-        y -= offsetTop;
+        x -= element.offsetLeft;
+        y -= element.offsetTop;
         touch.x = x;
         touch.y = y;
     }, false);
