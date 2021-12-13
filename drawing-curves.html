@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Curves</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <canvas id="canvas" width="400" height="400" style="margin: 0;"></canvas>
+
+    <script src="utils.js"></script>
+    <script>
+        window.onload = function () {
+            //curve();
+            //multiCurve();
+
+            multiCurve2();
+        };
+
+        function curve() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                mouse = utils.captureMouse(canvas),
+                x0 = 100,
+                y0 = 200,
+                x2 = 300,
+                y2 = 200;
+
+            canvas.addEventListener('mousemove', function () {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                var x1 = mouse.x,
+                    y1 = mouse.y;
+                //curve toward mouse 
+                context.beginPath();
+                context.moveTo(x0, y0);
+                context.quadraticCurveTo(x1, y1, x2, y2);
+                context.stroke();
+            }, false);
+        }
+
+        function multiCurve() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                points = [],
+                numPoints = 9;
+
+            //array of random point objects 
+            for (var i = 0; i < numPoints; i++) {
+                points.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height
+                });
+            }
+
+            //move to the first point 
+            context.beginPath();
+            context.moveTo(points[0].x, points[1].y);
+
+            //and loop through each successive pair 
+            for (i = 1; i < numPoints; i += 2) {
+                context.quadraticCurveTo(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
+            }
+            context.stroke();
+        }
+
+        function multiCurve2() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                points = [],
+                numPoints = 109,
+                ctrlPoint = {};
+            for (var i = 0; i < numPoints; i++) {
+                points.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height
+                });
+            }
+            
+            //move to the first point
+            context.beginPath();
+            context.moveTo(points[0].x, points[1].y);
+            //curve through the rest, stopping at each midpoint
+            for (i = 1; i < numPoints - 2; i++) {
+                ctrlPoint.x = (points[i].x + points[i + 1].x) / 2;
+                ctrlPoint.y = (points[i].y + points[i + 1].y) / 2;
+                context.quadraticCurveTo(points[i].x, points[i].y, ctrlPoint.x, ctrlPoint.y);
+            }
+            //curve through the last two points
+            context.quadraticCurveTo(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
+            context.stroke();
+        }
+    </script>
+</body>
+
+</html>
