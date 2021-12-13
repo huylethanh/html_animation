@@ -15,8 +15,134 @@
     <script src="scripts/arrow.js"></script>
     <script>
         window.onload = function () {
-            easing1();
+            // easing1();
+            //easing2();
+            //easingToMouseClick();
+            easingToMouse();
+            //easingOff();
         };
+
+        function easingOff() {
+
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                log = document.getElementById('log'),
+                ball = new Ball(),
+                easing = 0.05,
+                targetX = canvas.width / 2,
+                animRequest;
+
+            ball.y = canvas.height / 2;
+
+            (function drawFrame() {
+
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                var dx = targetX - ball.x;
+
+                if (Math.abs(dx) < 1) {
+                    ball.x = targetX;
+                    cancelAnimationFrame(animRequest);
+                    log.value = "Animation done!";
+                } else {
+                    var vx = dx * easing;
+                    ball.x += vx;
+                }
+                ball.draw(context);
+                animRequest = window.requestAnimationFrame(drawFrame, canvas);
+            }());
+        }
+
+        function easingToMouse() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                mouse = utils.captureMouse(canvas),
+                ball = new Ball(),
+                easing = 0.05;
+
+
+
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                var vx = (mouse.x - ball.x) * easing,
+                    vy = (mouse.y - ball.y) * easing;
+
+                ball.x += vx;
+                ball.y += vy;
+                ball.draw(context);
+            }());
+        }
+
+        function easingToMouseClick() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                mouse = utils.captureMouse(canvas),
+                ball = new Ball(),
+                easing = 0.05,
+                targetX = canvas.width / 2,
+                targetY = canvas.height / 2;
+
+            canvas.addEventListener('mousedown', function () {
+                targetX = mouse.x;
+                targetY = mouse.y;
+            }, false);
+
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                var vx = (targetX - ball.x) * easing,
+                    vy = (targetY - ball.y) * easing;
+
+                ball.x += vx;
+                ball.y += vy;
+                ball.draw(context);
+            }());
+        }
+
+        function easing2() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                mouse = utils.captureMouse(canvas),
+                ball = new Ball(),
+                easing = 0.05,
+                targetX = canvas.width / 2,
+                targetY = canvas.height / 2,
+                isMouseDown = false;
+
+            canvas.addEventListener('mousedown', function () {
+                if (utils.containsPoint(ball.getBounds(), mouse.x, mouse.y)) {
+                    isMouseDown = true;
+                    canvas.addEventListener('mouseup', onMouseUp, false);
+                    canvas.addEventListener('mousemove', onMouseMove, false);
+                }
+            }, false);
+
+            function onMouseUp() {
+                isMouseDown = false;
+                canvas.removeEventListener('mouseup', onMouseUp, false);
+                canvas.removeEventListener('mousemove', onMouseMove, false);
+            }
+
+            function onMouseMove() {
+                ball.x = mouse.x;
+                ball.y = mouse.y;
+            }
+
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                if (!isMouseDown) {
+                    var vx = (targetX - ball.x) * easing,
+                        vy = (targetY - ball.y) * easing;
+                    ball.x += vx;
+                    ball.y += vy;
+                }
+                ball.draw(context);
+            }());
+        }
 
         function easing1() {
             var canvas = document.getElementById('canvas'),

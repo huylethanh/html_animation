@@ -14,6 +14,40 @@
     <script src="scripts/arrow.js"></script>
     <script>
         window.onload = function () {
+            //rotation1();
+            rotation2();
+        };
+
+        function rotation2() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                mouse = utils.captureMouse(canvas),
+                arrow = new Arrow();
+            arrow.x = canvas.width / 2;
+            arrow.y = canvas.height / 2;
+
+            var rotation = 90,
+                targetRotation = 270,
+                easing = 0.05;
+
+            (function drawFrame() {
+
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                var dx = mouse.x - arrow.x;
+                var dy = mouse.y - arrow.y;
+
+                var rad = Math.atan(dy / dx);
+                var angle = rad * 180 / Math.PI;
+
+                rotation += (angle - rotation) * easing;
+                
+                arrow.rotation = rotation * Math.PI / 180; //degrees to radians 
+                arrow.draw(context);
+                window.requestAnimationFrame(drawFrame);
+            }());
+        }
+
+        function rotation1() {
             var canvas = document.getElementById('canvas'),
                 context = canvas.getContext('2d'),
                 mouse = utils.captureMouse(canvas),
@@ -32,7 +66,7 @@
                 arrow.draw(context);
                 window.requestAnimationFrame(drawFrame);
             }());
-        };
+        }
     </script>
 </body>
 
