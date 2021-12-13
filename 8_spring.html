@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Spring</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+    <canvas id="canvas" width="800" height="800" style="margin: 0;"></canvas>
+    <textarea id="log"></textarea>
+    <script src="scripts/ball.js"></script>
+    <script src="scripts/utils.js"></script>
+    <script src="scripts/arrow.js"></script>
+    <script>
+        window.onload = function () {
+            // spring1();
+            spring2();
+        };
+
+        function spring2() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                ball = new Ball(),
+                spring = 0.03,
+                targetX = canvas.width / 2,
+                vx = 0,
+                friction = 0.95;
+
+            ball.y = canvas.height / 2;
+
+            (function drawFrame() {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                var dx = targetX - ball.x,
+                    ax = dx * spring;
+
+                vx += ax;
+                vx *= friction;
+                ball.x += vx;
+                ball.draw(context);
+                window.requestAnimationFrame(drawFrame, canvas);
+            }());
+        }
+
+        function spring1() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                ball = new Ball(),
+                spring = 0.03,
+                targetX = canvas.width / 2,
+                vx = 0;
+
+            ball.y = canvas.height / 2;
+
+            (function drawFrame() {
+
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                var dx = targetX - ball.x,
+                    ax = dx * spring;
+
+                vx += ax;
+                ball.x += vx;
+                ball.draw(context);
+                window.requestAnimationFrame(drawFrame, canvas);
+            }());
+        }
+
+    </script>
+</body>
+
+</html>
